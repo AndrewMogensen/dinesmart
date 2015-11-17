@@ -1,4 +1,4 @@
-package com.example.brianito.dinesmartattempt1;
+package com.example.brianito.dinesmart_icons;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
