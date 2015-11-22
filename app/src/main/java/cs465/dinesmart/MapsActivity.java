@@ -1,5 +1,7 @@
 package cs465.dinesmart;
 
+import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
@@ -8,13 +10,20 @@ import java.util.HashMap;
 import java.util.List;
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBarActivity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.ExpandableListView.OnGroupCollapseListener;
 import android.widget.ExpandableListView.OnGroupExpandListener;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import android.os.Bundle;
@@ -38,6 +47,16 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import android.app.Activity;
+import android.graphics.Color;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.OvalShape;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.LinearLayout.LayoutParams;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
+
 public class MapsActivity extends ActionBarActivity implements OnMapReadyCallback,NavigationView.OnNavigationItemSelectedListener {
 
     private static GoogleMap mMap;
@@ -47,6 +66,8 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
     List<String> listDataHeader;
     List<String> listHeaderImage;
     HashMap<String, List<String>> listDataChild;
+
+    SeekBar seekBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +96,39 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
+        Context context = this;
+        Drawable thumb = ContextCompat.getDrawable(context, R.drawable.calorie_lt_indicator);
+        seekBar = new SeekBar(context);
+        seekBar.setMax(100);
 
+        seekBar.setThumb(thumb);
+        seekBar.setProgress(1);
+        seekBar.setVisibility(View.VISIBLE);
+        seekBar.setBackgroundColor(Color.TRANSPARENT);
+        seekBar.setPadding(150, 0, 170, 0);
+
+        LayoutParams lp = new LayoutParams(200, 200);
+        seekBar.setLayoutParams(lp);
+        lp.width = LayoutParams.MATCH_PARENT;
+        lp.height = LayoutParams.WRAP_CONTENT;
+        seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+
+            public void onStopTrackingTouch(SeekBar arg0) {
+                // TODO Auto-generated method stub
+                System.out.println(".....111.......");
+
+            }
+
+            public void onStartTrackingTouch(SeekBar arg0) {
+                // TODO Auto-generated method stub
+                System.out.println(".....222.......");
+            }
+
+            public void onProgressChanged(SeekBar arg0, int arg1, boolean arg2) {
+                // TODO Auto-generated method stub
+                System.out.println(".....333......." + arg1);
+            }
+        });
     }
     private void prepareListData() {
         listDataHeader = new ArrayList<String>();
@@ -167,10 +220,65 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
         }
     }
 
+    private int getRelativeTop(View myView) {
+        if (myView.getParent() == myView.getRootView())
+            return myView.getTop();
+        else
+            return myView.getTop() + getRelativeTop((View) myView.getParent());
+    }
+
+    private int getRelativeLeft(View myView) {
+        if (myView.getParent() == myView.getRootView())
+            return myView.getLeft();
+        else
+            return myView.getLeft() + getRelativeLeft((View) myView.getParent());
+    }
+
+    public void updateSeekBar(SeekBar seekBar, MotionEvent event) {
+        float pos = (event.getX() - 137)/8;
+        seekBar.setProgress((int) pos);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+
+        ImageButton imageButton = (ImageButton) findViewById(R.id.pricelt);
+
+        imageButton.setOnTouchListener(new View.OnTouchListener() {
+            ImageButton placeholderImg;
+            int placeholderIdx;
+
+            public boolean onTouch(View view, MotionEvent event) {
+                ((DrawerLayout) findViewById(R.id.drawer_layout)).requestDisallowInterceptTouchEvent(true);
+
+                LinearLayout l = (LinearLayout) findViewById(R.id.left_drawer_linear);
+
+                if (event.getAction() == android.view.MotionEvent.ACTION_DOWN) {
+                    MapsActivity.this.updateSeekBar(seekBar, event);
+
+                    this.placeholderImg = (ImageButton) l.findViewById(R.id.pricelt);
+                    placeholderIdx = l.indexOfChild(placeholderImg);
+                    placeholderImg.setVisibility(View.GONE);
+
+                    ((RelativeLayout) findViewById(R.id.left_drawer)).addView(seekBar);
+                    seekBar.setX(getRelativeLeft(placeholderImg) + 15);
+                    seekBar.setY(getRelativeTop(placeholderImg) - 70);
+                }
+                else if (event.getAction() == android.view.MotionEvent.ACTION_MOVE) {
+                    MapsActivity.this.updateSeekBar(seekBar, event);
+                }
+                else if (event.getAction() == android.view.MotionEvent.ACTION_UP) {
+                    ((DrawerLayout) findViewById(R.id.drawer_layout)).requestDisallowInterceptTouchEvent(false);
+                    ((RelativeLayout) findViewById(R.id.left_drawer)).removeView(seekBar);
+                    placeholderImg.setVisibility(View.VISIBLE);
+                }
+
+                return true;
+            }
+        });
+
         return true;
     }
 
