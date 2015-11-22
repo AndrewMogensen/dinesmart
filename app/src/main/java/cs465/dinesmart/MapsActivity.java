@@ -160,6 +160,10 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
         }
     }
 
+    protected void updateMenu(filter f, int value) {
+        // TODO: Update menu for the filter changes
+    }
+
     private void setupSeekbar(final filter f) {
         Context context = this;
         SeekBarWithText seekBar = new SeekBarWithText(context);
@@ -198,6 +202,9 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
 
                 // Set the indicator to have the filter value
                 ((TextView) filterIndicators.get(f).findViewById(R.id.sub_text)).setText(val);
+
+                // Update the menu items
+                updateMenu(f, value);
             }
         });
 
