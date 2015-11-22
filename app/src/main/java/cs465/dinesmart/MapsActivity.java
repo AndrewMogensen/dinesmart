@@ -2,40 +2,26 @@ package cs465.dinesmart;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import android.app.Activity;
-import android.os.Bundle;
+
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ExpandableListView;
-import android.widget.ExpandableListView.OnChildClickListener;
-import android.widget.ExpandableListView.OnGroupClickListener;
-import android.widget.ExpandableListView.OnGroupCollapseListener;
-import android.widget.ExpandableListView.OnGroupExpandListener;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
-import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -48,15 +34,11 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import android.app.Activity;
 import android.graphics.Color;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.OvalShape;
-import android.os.Bundle;
-import android.view.View;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.TextView;
 
 public class MapsActivity extends ActionBarActivity implements OnMapReadyCallback,NavigationView.OnNavigationItemSelectedListener {
 
@@ -68,7 +50,7 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
     List<String> listHeaderImage;
     HashMap<String, List<String>> listDataChild;
 
-    SeekBar seekBar;
+    SeekBarWithText seekBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +81,9 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
 
         Context context = this;
         Drawable thumb = ContextCompat.getDrawable(context, R.drawable.calorie_lt_indicator);
-        seekBar = new SeekBar(context);
+        seekBar = new SeekBarWithText(context);
+        seekBar.setOverlayText("Price");
+        seekBar.setSubText("$10");
         seekBar.setMax(100);
 
         seekBar.setThumb(thumb);
@@ -125,9 +109,11 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
                 System.out.println(".....222.......");
             }
 
-            public void onProgressChanged(SeekBar arg0, int arg1, boolean arg2) {
-                // TODO Auto-generated method stub
-                System.out.println(".....333......." + arg1);
+            public void onProgressChanged(SeekBar seekbar, int value, boolean arg2) {
+                SeekBarWithText bar = (SeekBarWithText) seekbar;
+                String val = "$" + value;
+                bar.setSubText(val);
+                ((TextView) findViewById(R.id.pricelt_subtext)).setText(val);
             }
         });
     }
@@ -237,7 +223,6 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
 
     public void updateSeekBar(SeekBar seekBar, MotionEvent event) {
         float pos = ((event.getX() - (getRelativeLeft(seekBar)+150))/(seekBar.getWidth()-(170+150)))*100;
-        System.out.println(pos);
         seekBar.setProgress((int) pos);
     }
 
@@ -256,10 +241,10 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
             }
         });
 
-        ImageButton imageButton = (ImageButton) findViewById(R.id.pricelt);
+        ImageButton indicatorButton = (ImageButton) findViewById(R.id.pricelt_button);
 
-        imageButton.setOnTouchListener(new View.OnTouchListener() {
-            ImageButton placeholderImg;
+        indicatorButton.setOnTouchListener(new View.OnTouchListener() {
+            RelativeLayout indicator;
 
             public boolean onTouch(View view, MotionEvent event) {
                 // Keep the drawer slide-in mechanism from firing while sliding the seekbar
@@ -270,23 +255,21 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
 
                 if (event.getAction() == android.view.MotionEvent.ACTION_DOWN) {
                     // Hide the image
-                    this.placeholderImg = (ImageButton) indicators.findViewById(R.id.pricelt);
-                    placeholderImg.setVisibility(View.GONE);
+                    this.indicator = (RelativeLayout) indicators.findViewById(R.id.pricelt);
+                    indicator.setVisibility(View.INVISIBLE);
 
                     // Add the seekbar and put it on top of the previous image
                     ((RelativeLayout) findViewById(R.id.left_drawer)).addView(seekBar);
-                    seekBar.setX(getRelativeLeft(placeholderImg) + 15);
-                    seekBar.setY(getRelativeTop(placeholderImg) - 70);
+                    seekBar.setX(getRelativeLeft(indicator) + 15);
+                    seekBar.setY(getRelativeTop(indicator) - 70);
 
                     MapsActivity.this.updateSeekBar(seekBar, event); // Put seekbar at post 0
-                }
-                else if (event.getAction() == android.view.MotionEvent.ACTION_MOVE) {
+                } else if (event.getAction() == android.view.MotionEvent.ACTION_MOVE) {
                     MapsActivity.this.updateSeekBar(seekBar, event); // Put the seek bar in the thumb position
-                }
-                else if (event.getAction() == android.view.MotionEvent.ACTION_UP) {
+                } else if (event.getAction() == android.view.MotionEvent.ACTION_UP) {
                     drawer.requestDisallowInterceptTouchEvent(false); // reenable slide to close
                     ((RelativeLayout) findViewById(R.id.left_drawer)).removeView(seekBar);
-                    placeholderImg.setVisibility(View.VISIBLE);
+                    indicator.setVisibility(View.VISIBLE);
                 }
 
                 return true;
