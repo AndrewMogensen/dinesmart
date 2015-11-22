@@ -236,7 +236,8 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
     }
 
     public void updateSeekBar(SeekBar seekBar, MotionEvent event) {
-        float pos = (event.getX() - 137)/8;
+        float pos = ((event.getX() - (getRelativeLeft(seekBar)+150))/(seekBar.getWidth()-(170+150)))*100;
+        System.out.println(pos);
         seekBar.setProgress((int) pos);
     }
 
@@ -268,8 +269,6 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
                 LinearLayout indicators = (LinearLayout) findViewById(R.id.left_drawer_linear);
 
                 if (event.getAction() == android.view.MotionEvent.ACTION_DOWN) {
-                    MapsActivity.this.updateSeekBar(seekBar, event); // Put seekbar at post 0
-
                     // Hide the image
                     this.placeholderImg = (ImageButton) indicators.findViewById(R.id.pricelt);
                     placeholderImg.setVisibility(View.GONE);
@@ -278,6 +277,8 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
                     ((RelativeLayout) findViewById(R.id.left_drawer)).addView(seekBar);
                     seekBar.setX(getRelativeLeft(placeholderImg) + 15);
                     seekBar.setY(getRelativeTop(placeholderImg) - 70);
+
+                    MapsActivity.this.updateSeekBar(seekBar, event); // Put seekbar at post 0
                 }
                 else if (event.getAction() == android.view.MotionEvent.ACTION_MOVE) {
                     MapsActivity.this.updateSeekBar(seekBar, event); // Put the seek bar in the thumb position
