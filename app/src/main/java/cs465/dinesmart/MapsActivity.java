@@ -275,7 +275,7 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
                     placeholderImg.setVisibility(View.GONE);
 
                     // Add the seekbar and put it on top of the previous image
-                    drawer.addView(seekBar);
+                    ((RelativeLayout) findViewById(R.id.left_drawer)).addView(seekBar);
                     seekBar.setX(getRelativeLeft(placeholderImg) + 15);
                     seekBar.setY(getRelativeTop(placeholderImg) - 70);
                 }
@@ -284,7 +284,7 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
                 }
                 else if (event.getAction() == android.view.MotionEvent.ACTION_UP) {
                     drawer.requestDisallowInterceptTouchEvent(false); // reenable slide to close
-                    drawer.removeView(seekBar);
+                    ((RelativeLayout) findViewById(R.id.left_drawer)).removeView(seekBar);
                     placeholderImg.setVisibility(View.VISIBLE);
                 }
 
