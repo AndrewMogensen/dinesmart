@@ -11,6 +11,7 @@ import java.util.List;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ExpandableListView;
@@ -49,17 +50,36 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
     List<String> listDataHeader;
     List<String> listHeaderImage;
     HashMap<String, List<String>> listDataChild;
+    HashMap<filter, View> filterIndicators;
+    HashMap<filter, SeekBarWithText> filterSeekbars;
 
-    SeekBarWithText seekBar;
+    class filter {
+        String name;
+        int maxValue;
+        String prefix; // used for $
+        String suffix; // used for 'g' in protein
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps);
+        boolean lessThan;
+
+        public filter(String name, int maxValue, String prefix, String suffix, boolean lessThan) {
+            this.name = name;
+            this.maxValue = maxValue;
+            this.prefix = prefix;
+            this.lessThan = lessThan;
+            this.suffix = suffix;
+        }
+    }
+
+    List<filter> filters;
+
+    private void setupMapFragment() {
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+    }
+
+    private void setupListView() {
         // get the listview
         expListView = (ExpandableListView) findViewById(R.id.lvExp);
 
@@ -70,7 +90,9 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
 
         // setting list adapter
         expListView.setAdapter(listAdapter);
+    }
 
+    private void setupDrawer() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -78,14 +100,75 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+    }
 
+    private void addFilterIndicatorToLayout(final filter f, LinearLayout indicatorLayout) {
+        // Inflate the indicator
+        LayoutInflater inflater = (LayoutInflater)   this.getSystemService(LAYOUT_INFLATER_SERVICE);
+
+        int indicatorTemplate = f.lessThan ? R.layout.lt_indicator : R.layout.gt_indicator;
+        final View indicator = inflater.inflate(indicatorTemplate, indicatorLayout, false);
+
+        // Set the text up
+                ((TextView) indicator.findViewById(R.id.indicator_name)).setText(f.name);
+        ((TextView) indicator.findViewById(R.id.sub_text)).setText(f.prefix + f.maxValue + f.suffix);
+
+        // Add it to the layout
+        indicatorLayout.addView(indicator, 0);
+
+        filterIndicators.put(f, indicator);
+
+        // Setup the button to reveal the slider
+        ImageButton indicatorButton = (ImageButton) indicator.findViewById(R.id.button);
+        indicatorButton.setOnTouchListener(new View.OnTouchListener() {
+            public boolean onTouch(View view, MotionEvent event) {
+                SeekBarWithText seekBar = filterSeekbars.get(f);
+
+                // Keep the drawer slide-in mechanism from firing while sliding the seekbar
+                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                drawer.requestDisallowInterceptTouchEvent(true);
+
+                LinearLayout indicators = (LinearLayout) findViewById(R.id.left_drawer_linear);
+
+                if (event.getAction() == android.view.MotionEvent.ACTION_DOWN) {
+                    // Hide the image
+                    indicator.setVisibility(View.INVISIBLE);
+
+                    // Add the seekbar and put it on top of the previous image
+                    ((RelativeLayout) findViewById(R.id.left_drawer)).addView(seekBar);
+                    seekBar.setX(getRelativeLeft(indicator) + 15);
+                    seekBar.setY(getRelativeTop(indicator) - 70);
+
+                    MapsActivity.this.updateDraggableFilterProgress(f, event); // Put seekbar at post 0
+                } else if (event.getAction() == android.view.MotionEvent.ACTION_MOVE) {
+                    MapsActivity.this.updateDraggableFilterProgress(f, event); // Put the seek bar in the thumb position
+                } else if (event.getAction() == android.view.MotionEvent.ACTION_UP) {
+                    drawer.requestDisallowInterceptTouchEvent(false); // reenable slide to close
+                    ((RelativeLayout) findViewById(R.id.left_drawer)).removeView(seekBar);
+                    indicator.setVisibility(View.VISIBLE);
+                }
+
+                return true;
+            }
+        });
+    }
+
+    private void setupIndicators() {
+        LinearLayout indicatorLayout = (LinearLayout) findViewById(R.id.left_drawer_linear);
+        for (filter f : filters) {
+            addFilterIndicatorToLayout(f, indicatorLayout);
+        }
+    }
+
+    private void setupSeekbar(final filter f) {
         Context context = this;
-        Drawable thumb = ContextCompat.getDrawable(context, R.drawable.calorie_lt_indicator);
-        seekBar = new SeekBarWithText(context);
-        seekBar.setOverlayText("Price");
-        seekBar.setSubText("$10");
-        seekBar.setMax(100);
+        SeekBarWithText seekBar = new SeekBarWithText(context);
+        seekBar.setOverlayText(f.name);
+        seekBar.setSubText(f.prefix + f.maxValue + f.suffix);
+        seekBar.setMax(f.maxValue);
 
+        int thumbTemplate = f.lessThan ? R.drawable.lt_indicator_circle : R.drawable.gt_indicator_circle;
+        Drawable thumb = ContextCompat.getDrawable(context, thumbTemplate);
         seekBar.setThumb(thumb);
         seekBar.setProgress(1);
         seekBar.setVisibility(View.VISIBLE);
@@ -100,22 +183,54 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
 
             public void onStopTrackingTouch(SeekBar arg0) {
                 // TODO Auto-generated method stub
-                System.out.println(".....111.......");
-
             }
 
             public void onStartTrackingTouch(SeekBar arg0) {
                 // TODO Auto-generated method stub
-                System.out.println(".....222.......");
             }
 
             public void onProgressChanged(SeekBar seekbar, int value, boolean arg2) {
-                SeekBarWithText bar = (SeekBarWithText) seekbar;
-                String val = "$" + value;
+                SeekBarWithText bar = (SeekBarWithText) seekbar; // casting seekbar so we can set text
+
+                // Update the value on the bar
+                String val = f.prefix + value + f.suffix;
                 bar.setSubText(val);
-                ((TextView) findViewById(R.id.pricelt_subtext)).setText(val);
+
+                // Set the indicator to have the filter value
+                ((TextView) filterIndicators.get(f).findViewById(R.id.sub_text)).setText(val);
             }
         });
+
+        filterSeekbars.put(f, seekBar);
+    }
+
+    private void setupSeekbars() {
+        for (filter f : filters) {
+            setupSeekbar(f);
+        }
+    }
+
+    private void setupFilters() {
+        setupSeekbars();
+        setupIndicators();
+    }
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_maps);
+
+        filters = new ArrayList<filter>();
+        filters.add(new filter("Protein", 80, "", "g", false));
+        filters.add(new filter("Calories", 1500, "", "", true));
+        filters.add(new filter("Price", 50, "$", "", true));
+
+        filterIndicators = new HashMap<filter, View>();
+        filterSeekbars = new HashMap<filter, SeekBarWithText>();
+
+        setupMapFragment();
+        setupListView();
+        setupDrawer();
+        setupFilters();
     }
     private void prepareListData() {
         listDataHeader = new ArrayList<String>();
@@ -221,8 +336,9 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
             return myView.getLeft() + getRelativeLeft((View) myView.getParent());
     }
 
-    public void updateSeekBar(SeekBar seekBar, MotionEvent event) {
-        float pos = ((event.getX() - (getRelativeLeft(seekBar)+150))/(seekBar.getWidth()-(170+150)))*100;
+    public void updateDraggableFilterProgress(filter f, MotionEvent event) {
+        SeekBar seekBar = filterSeekbars.get(f);
+        float pos = ((event.getX() - (getRelativeLeft(seekBar)+150))/(seekBar.getWidth()-(170+150)))*f.maxValue;
         seekBar.setProgress((int) pos);
     }
 
@@ -238,41 +354,6 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
             public void onClick(View view) {
                 DrawerLayout transparentFrame = (DrawerLayout) findViewById(R.id.drawer_layout);
                 transparentFrame.closeDrawer(Gravity.LEFT);
-            }
-        });
-
-        ImageButton indicatorButton = (ImageButton) findViewById(R.id.pricelt_button);
-
-        indicatorButton.setOnTouchListener(new View.OnTouchListener() {
-            RelativeLayout indicator;
-
-            public boolean onTouch(View view, MotionEvent event) {
-                // Keep the drawer slide-in mechanism from firing while sliding the seekbar
-                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-                drawer.requestDisallowInterceptTouchEvent(true);
-
-                LinearLayout indicators = (LinearLayout) findViewById(R.id.left_drawer_linear);
-
-                if (event.getAction() == android.view.MotionEvent.ACTION_DOWN) {
-                    // Hide the image
-                    this.indicator = (RelativeLayout) indicators.findViewById(R.id.pricelt);
-                    indicator.setVisibility(View.INVISIBLE);
-
-                    // Add the seekbar and put it on top of the previous image
-                    ((RelativeLayout) findViewById(R.id.left_drawer)).addView(seekBar);
-                    seekBar.setX(getRelativeLeft(indicator) + 15);
-                    seekBar.setY(getRelativeTop(indicator) - 70);
-
-                    MapsActivity.this.updateSeekBar(seekBar, event); // Put seekbar at post 0
-                } else if (event.getAction() == android.view.MotionEvent.ACTION_MOVE) {
-                    MapsActivity.this.updateSeekBar(seekBar, event); // Put the seek bar in the thumb position
-                } else if (event.getAction() == android.view.MotionEvent.ACTION_UP) {
-                    drawer.requestDisallowInterceptTouchEvent(false); // reenable slide to close
-                    ((RelativeLayout) findViewById(R.id.left_drawer)).removeView(seekBar);
-                    indicator.setVisibility(View.VISIBLE);
-                }
-
-                return true;
             }
         });
 
