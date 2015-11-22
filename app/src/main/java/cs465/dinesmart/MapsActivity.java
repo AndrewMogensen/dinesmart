@@ -12,6 +12,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBarActivity;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ExpandableListView;
@@ -244,34 +245,46 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
 
+        // There's a giant relative view that's transparent, to make room for and hold the sliders.
+        // This makes clicking on that view collapse the drawer, as expected.
+        final RelativeLayout drawer = (RelativeLayout) findViewById(R.id.left_drawer);
+        drawer.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                DrawerLayout transparentFrame = (DrawerLayout) findViewById(R.id.drawer_layout);
+                transparentFrame.closeDrawer(Gravity.LEFT);
+            }
+        });
+
         ImageButton imageButton = (ImageButton) findViewById(R.id.pricelt);
 
         imageButton.setOnTouchListener(new View.OnTouchListener() {
             ImageButton placeholderImg;
-            int placeholderIdx;
 
             public boolean onTouch(View view, MotionEvent event) {
-                ((DrawerLayout) findViewById(R.id.drawer_layout)).requestDisallowInterceptTouchEvent(true);
+                // Keep the drawer slide-in mechanism from firing while sliding the seekbar
+                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                drawer.requestDisallowInterceptTouchEvent(true);
 
-                LinearLayout l = (LinearLayout) findViewById(R.id.left_drawer_linear);
+                LinearLayout indicators = (LinearLayout) findViewById(R.id.left_drawer_linear);
 
                 if (event.getAction() == android.view.MotionEvent.ACTION_DOWN) {
-                    MapsActivity.this.updateSeekBar(seekBar, event);
+                    MapsActivity.this.updateSeekBar(seekBar, event); // Put seekbar at post 0
 
-                    this.placeholderImg = (ImageButton) l.findViewById(R.id.pricelt);
-                    placeholderIdx = l.indexOfChild(placeholderImg);
+                    // Hide the image
+                    this.placeholderImg = (ImageButton) indicators.findViewById(R.id.pricelt);
                     placeholderImg.setVisibility(View.GONE);
 
-                    ((RelativeLayout) findViewById(R.id.left_drawer)).addView(seekBar);
+                    // Add the seekbar and put it on top of the previous image
+                    drawer.addView(seekBar);
                     seekBar.setX(getRelativeLeft(placeholderImg) + 15);
                     seekBar.setY(getRelativeTop(placeholderImg) - 70);
                 }
                 else if (event.getAction() == android.view.MotionEvent.ACTION_MOVE) {
-                    MapsActivity.this.updateSeekBar(seekBar, event);
+                    MapsActivity.this.updateSeekBar(seekBar, event); // Put the seek bar in the thumb position
                 }
                 else if (event.getAction() == android.view.MotionEvent.ACTION_UP) {
-                    ((DrawerLayout) findViewById(R.id.drawer_layout)).requestDisallowInterceptTouchEvent(false);
-                    ((RelativeLayout) findViewById(R.id.left_drawer)).removeView(seekBar);
+                    drawer.requestDisallowInterceptTouchEvent(false); // reenable slide to close
+                    drawer.removeView(seekBar);
                     placeholderImg.setVisibility(View.VISIBLE);
                 }
 
