@@ -31,12 +31,37 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".PandaExpressPageActivity"
+            android:label="@string/title_activity_panda_express_page"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
+        <activity
+            android:name=".SubwayActivity"
+            android:label="@string/title_activity_subway"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
+        <activity
+            android:name=".McDonaldsActivity"
+            android:label="@string/title_activity_mc_donalds"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
+        <activity
+            android:name=".MiaZaActivity"
+            android:label="@string/title_activity_mia_za"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
+        <activity
+            android:name=".PaneraBreadActivity"
+            android:label="@string/title_activity_panera_bread"
+            android:theme="@style/AppTheme.NoActionBar" >
         </activity>
     </application>
 

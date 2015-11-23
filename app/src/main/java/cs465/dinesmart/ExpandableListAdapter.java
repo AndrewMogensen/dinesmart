@@ -1,5 +1,6 @@
 package cs465.dinesmart;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 import android.widget.ImageView;
+
 
 import java.util.HashMap;
 import java.util.List;
@@ -101,20 +103,56 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
         ImageView imgListChild = (ImageView) convertView
                 .findViewById(R.id.foodType);
+        ImageView restPageNav = (ImageView) convertView.findViewById(R.id.restaurantPage);
         if (imagename == "chinese") {
             imgListChild.setImageResource(R.drawable.chinese);
+            restPageNav.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(v.getContext(),PandaExpressPageActivity.class);
+                    v.getContext().startActivity(intent);
+                }
+            });
         }
         if (imagename == "bread") {
             imgListChild.setImageResource(R.drawable.bread);
+            restPageNav.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(v.getContext(), PaneraBreadActivity.class);
+                    v.getContext().startActivity(intent);
+                }
+            });
         }
         if (imagename == "sandwich") {
             imgListChild.setImageResource(R.drawable.sandwich);
+            restPageNav.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(v.getContext(), SubwayActivity.class);
+                    v.getContext().startActivity(intent);
+                }
+            });
         }
         if (imagename == "fastfood") {
             imgListChild.setImageResource(R.drawable.fastfood);
+            restPageNav.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(v.getContext(), McDonaldsActivity.class);
+                    v.getContext().startActivity(intent);
+                }
+            });
         }
         if (imagename == "italian") {
             imgListChild.setImageResource(R.drawable.italian);
+            restPageNav.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(v.getContext(), MiaZaActivity.class);
+                    v.getContext().startActivity(intent);
+                }
+            });
         }
 
         return convertView;
