@@ -3,11 +3,14 @@ package cs465.dinesmart;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
-public class PandaExpressPageActivity extends AppCompatActivity {
+public class PandaExpressPageActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,14 +19,46 @@ public class PandaExpressPageActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        setTitle("Panda Express");
+
+        String [] appetizerFood = {"Chicken Egg Roll","Veggie Spring Roll","Cream Cheese Rangoon","Hot and Sour Soup"};
+        String [] shrimpFood = {"Honey Walnut Shrimp", "Peppercorn Shrimp"};
+        String [] beefFood = {"Beijing Beef","Kobari Beef","Broccoli Beef"};
+        String [] chickenFood = {"Orange Chicken","Kung Pao Chicken","Mandarin Chicken","Sweetfire Chicken Breast"};
+
+
+        ArrayAdapter<String> appetizerAdapter = new ArrayAdapter<String>(
+                this,
+                android.R.layout.simple_list_item_1,
+                appetizerFood
+        );
+        ListView appetizerList = (ListView) findViewById(R.id.listView);
+        appetizerList.setAdapter(appetizerAdapter);
+
+        ArrayAdapter<String> shrimpAdapter = new ArrayAdapter<String>(
+                this,
+                android.R.layout.simple_list_item_1,
+                shrimpFood
+        );
+        ListView shrimpList = (ListView) findViewById(R.id.listView2);
+        shrimpList.setAdapter(shrimpAdapter);
+
+
+        ArrayAdapter<String> beefAdapter = new ArrayAdapter<String>(
+                this,
+                android.R.layout.simple_list_item_1,
+                beefFood
+        );
+        ListView beefList = (ListView) findViewById(R.id.listView3);
+        beefList.setAdapter(beefAdapter);
+
+        ArrayAdapter<String> chickenAdapter = new ArrayAdapter<String>(
+                this,
+                android.R.layout.simple_list_item_1,
+                chickenFood
+        );
+        ListView chickenList = (ListView) findViewById(R.id.listView4);
+        chickenList.setAdapter(chickenAdapter);
     }
 
 }
