@@ -30,7 +30,9 @@
             android:layout_marginLeft="260dp"
             android:layout_width="40dp"
             android:layout_height="match_parent"
-            android:src="@drawable/page"/>
+            android:src="@drawable/page"
+            android:id="@+id/restaurantPage"/>
+
         <ImageView
             android:layout_marginLeft="310dp"
             android:layout_width="40dp"
