@@ -49,7 +49,7 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
     ExpandableListView expListView;
     List<String> listDataHeader;
     List<String> listHeaderImage;
-    HashMap<String, List<String>> listDataChild;
+    HashMap<String, List<RestMenuItem>> listDataChild;
     HashMap<filter, View> filterIndicators;
     HashMap<filter, SeekBarWithText> filterSeekbars;
 
@@ -242,53 +242,44 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
     private void prepareListData() {
         listDataHeader = new ArrayList<String>();
         listHeaderImage = new ArrayList<String>();
-        listDataChild = new HashMap<String, List<String>>();
+        listDataChild = new HashMap<String, List<RestMenuItem>>();
 
         // Adding child data
         listDataHeader.add("Panda Express");
         listDataHeader.add("Panera Bread");
         listDataHeader.add("Subway");
         listDataHeader.add("McDonalds");
-        listDataHeader.add("Mia Za's");
 
         listHeaderImage.add("chinese");
         listHeaderImage.add("bread");
         listHeaderImage.add("sandwich");
         listHeaderImage.add("fastfood");
-        listHeaderImage.add("italian");
 
-        // Adding child data
-        List<String> panda = new ArrayList<String>();
-        panda.add("Orange Chicken");
-        panda.add("General Tso's Chicken");
-        panda.add("Fried Rice");
-        panda.add("Chow Mein");
+        // Adding menu data
+        List<RestMenuItem> panda = new ArrayList<RestMenuItem>();
+        panda.add(new RestMenuItem("Orange Chicken", 5.80, 380, 14));
+        panda.add(new RestMenuItem("Kung Pao Chicken", 5.80, 290, 16));
+        panda.add(new RestMenuItem("Fried Rice", 2.70, 520, 9));
 
-        List<String> panera = new ArrayList<String>();
-        panera.add("Chicken Ceasar Salad");
-        panera.add("Broccoli Cheddar Soup");
-        panera.add("Sourdough Loaf");
+        List<RestMenuItem> panera = new ArrayList<RestMenuItem>();
+        panera.add(new RestMenuItem("Chicken Ceasar Salad", 7.49, 460, 14));
+        panera.add(new RestMenuItem("Broccoli Cheddar Soup", 4.99, 330, 34));
+        panera.add(new RestMenuItem("Sierra Turkey Sandwich", 6.99, 730, 40));
 
-        List<String> subway = new ArrayList<String>();
-        subway.add("BLT");
-        subway.add("Spicy Italian");
-        subway.add("Meatball Sub");
+        List<RestMenuItem> subway = new ArrayList<RestMenuItem>();
+        subway.add(new RestMenuItem("Footlong Subway Club", 7.75, 620, 46));
+        subway.add(new RestMenuItem("6\" Italian B.M.T.", 3.75, 410, 20));
+        subway.add(new RestMenuItem("6\" Meatball Sub", 4.25, 480, 21));
 
-        List<String> mcD = new ArrayList<String>();
-        mcD.add("Big Mac");
-        mcD.add("10-piece McNuggent");
-        mcD.add("Large Fries");
-
-        List<String> miaz = new ArrayList<String>();
-        miaz.add("Cheese Pizza");
-        miaz.add("Fettuccine Alfredo");
-        miaz.add("BBQ Chicken Sandwich");
+        List<RestMenuItem> mcD = new ArrayList<RestMenuItem>();
+        mcD.add(new RestMenuItem("Big Mac", 3.99, 540, 25));
+        mcD.add(new RestMenuItem("10-piece McNuggent", 4.49, 470, 22));
+        mcD.add(new RestMenuItem("Large Fries", 1.89, 510, 2));
 
         listDataChild.put(listDataHeader.get(0), panda); // Header, Child data
         listDataChild.put(listDataHeader.get(1), panera);
         listDataChild.put(listDataHeader.get(2), subway);
         listDataChild.put(listDataHeader.get(3), mcD);
-        listDataChild.put(listDataHeader.get(4), miaz);
     }
 
 

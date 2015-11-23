@@ -17,10 +17,10 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     private List<String> _listDataHeader; // header titles
     private List<String> _listHeaderImage;
     // child data in format of header title, child title
-    private HashMap<String, List<String>> _listDataChild;
+    private HashMap<String, List<RestMenuItem>> _listDataChild;
 
     public ExpandableListAdapter(Context context, List<String> listDataHeader,
-                                 List<String> listHeaderImage, HashMap<String, List<String>> listChildData) {
+                                 List<String> listHeaderImage, HashMap<String, List<RestMenuItem>> listChildData) {
         this._context = context;
         this._listDataHeader = listDataHeader;
         this._listDataChild = listChildData;
@@ -28,7 +28,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public Object getChild(int groupPosition, int childPosititon) {
+    public RestMenuItem getChild(int groupPosition, int childPosititon) {
         return this._listDataChild.get(this._listDataHeader.get(groupPosition))
                 .get(childPosititon);
     }
@@ -42,7 +42,8 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     public View getChildView(int groupPosition, final int childPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
 
-        final String childText = (String) getChild(groupPosition, childPosition);
+        final RestMenuItem childItem = getChild(groupPosition, childPosition);
+        String childText = childItem.getItemName();
 
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this._context
