@@ -10,28 +10,48 @@ import android.widget.TextView;
 import android.widget.ImageView;
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
     private Context _context;
-    private List<String> _listDataHeader; // header titles
+    private List<String> restaurantsOriginal;
+    private List<String> restaurantsCurrent;
     private List<String> _listHeaderImage;
-    // child data in format of header title, child title
-    private HashMap<String, List<RestMenuItem>> _listDataChild;
+    // child data in format of Restaurant name, menuItem list.
+    private HashMap<String, List<RestMenuItem>> menuDataOriginal;
+    private HashMap<String, List<RestMenuItem>> menuDataCurrent;
 
     public ExpandableListAdapter(Context context, List<String> listDataHeader,
                                  List<String> listHeaderImage, HashMap<String, List<RestMenuItem>> listChildData) {
+
         this._context = context;
-        this._listDataHeader = listDataHeader;
-        this._listDataChild = listChildData;
+
+        this.restaurantsOriginal = new ArrayList<String>();
+        restaurantsOriginal.addAll(listDataHeader);
+        this.restaurantsCurrent = new ArrayList<String>();
+        restaurantsCurrent.addAll(listDataHeader);
+
+        this.menuDataOriginal = new HashMap<String, List<RestMenuItem>>();
+        for (String rest : restaurantsOriginal) {
+            List<RestMenuItem> newList = new ArrayList<RestMenuItem>();
+            newList.addAll(listChildData.get(rest));
+            menuDataOriginal.put(rest, newList);
+        }
+        this.menuDataCurrent = new HashMap<String, List<RestMenuItem>>();
+        for (String rest : restaurantsOriginal) {
+            List<RestMenuItem> newList = new ArrayList<RestMenuItem>();
+            newList.addAll(listChildData.get(rest));
+            menuDataCurrent.put(rest, newList);
+        }
         this._listHeaderImage = listHeaderImage;
     }
 
     @Override
     public RestMenuItem getChild(int groupPosition, int childPosititon) {
-        return this._listDataChild.get(this._listDataHeader.get(groupPosition))
+        return this.menuDataCurrent.get(this.restaurantsCurrent.get(groupPosition))
                 .get(childPosititon);
     }
 
@@ -62,13 +82,13 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return this._listDataChild.get(this._listDataHeader.get(groupPosition))
+        return this.menuDataCurrent.get(this.restaurantsCurrent.get(groupPosition))
                 .size();
     }
 
     @Override
     public Object getGroup(int groupPosition) {
-        return this._listDataHeader.get(groupPosition);
+        return this.restaurantsCurrent.get(groupPosition);
     }
 
     public Object getFoodType(int groupPosition) {
@@ -77,7 +97,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getGroupCount() {
-        return this._listDataHeader.size();
+        return this.restaurantsCurrent.size();
     }
 
     @Override
@@ -109,7 +129,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             restPageNav.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(v.getContext(),PandaExpressPageActivity.class);
+                    Intent intent = new Intent(v.getContext(), PandaExpressPageActivity.class);
                     v.getContext().startActivity(intent);
                 }
             });
@@ -156,6 +176,47 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         }
 
         return convertView;
+    }
+
+    public void filterData(List<cs465.dinesmart.MapsActivity.filter> filters) {
+
+        restaurantsCurrent.clear();
+        menuDataCurrent.clear();
+
+        for (String rest : restaurantsOriginal) {
+
+            List<RestMenuItem> itemList = menuDataOriginal.get(rest);
+            List<RestMenuItem> newList = new ArrayList<RestMenuItem>();
+            for (RestMenuItem menuItem : itemList) {
+                if (shouldAdd(filters, menuItem)) {
+                    newList.add(menuItem);
+                }
+            }
+            if (newList.size() > 0) {
+                restaurantsCurrent.add(rest);
+                menuDataCurrent.put(rest, newList);
+            }
+        }
+        notifyDataSetChanged();
+    }
+
+    public boolean shouldAdd(List<cs465.dinesmart.MapsActivity.filter> filters, RestMenuItem currentItem) {
+        boolean retVal = true;
+        for (cs465.dinesmart.MapsActivity.filter f: filters){
+            if (f.name.contains("rotein")){
+                if (f.lessThan && f.currentValue < currentItem.getProtein()) { retVal = false; }
+                else if (!f.lessThan && f.currentValue > currentItem.getProtein()) {retVal = false;}
+            }
+            else if (f.name.contains("alories")){
+                if (f.lessThan && f.currentValue < currentItem.getCalories()) { retVal = false; }
+                else if (!f.lessThan && f.currentValue > currentItem.getCalories()) {retVal = false;}
+            }
+            else if (f.name.contains("rice")){
+                if (f.lessThan && f.currentValue < currentItem.getPrice()) { retVal = false; }
+                else if (!f.lessThan && f.currentValue > currentItem.getPrice()) {retVal = false;}
+            }
+        }
+        return retVal;
     }
 
     @Override

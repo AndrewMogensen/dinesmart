@@ -49,15 +49,16 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
     ExpandableListView expListView;
     List<String> listDataHeader;
     List<String> listHeaderImage;
-    HashMap<String, List<RestMenuItem>> listDataChild;
+    HashMap<String, List<RestMenuItem>> listDataChild; //maps Restaurant names to a list of menu items.
     HashMap<filter, View> filterIndicators;
     HashMap<filter, SeekBarWithText> filterSeekbars;
 
-    class filter {
+    public class filter {
         String name;
         int maxValue;
         String prefix; // used for $
         String suffix; // used for 'g' in protein
+        int currentValue;
 
         boolean lessThan;
 
@@ -67,6 +68,15 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
             this.prefix = prefix;
             this.lessThan = lessThan;
             this.suffix = suffix;
+            if (name.contains("rotein")){
+                this.currentValue = 0;
+            }
+            else if (name.contains("alories")){
+                this.currentValue = 1500;
+            }
+            else if (name.contains("rice")){
+                this.currentValue = 50;
+            }
         }
     }
 
@@ -161,7 +171,8 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
     }
 
     protected void updateMenu(filter f, int value) {
-        // TODO: Update menu for the filter changes
+        filters.get(filters.indexOf(f)).currentValue = value;
+        listAdapter.filterData(filters);
     }
 
     private void setupSeekbar(final filter f) {
@@ -185,15 +196,9 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
         lp.height = LayoutParams.WRAP_CONTENT;
         seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
-            public void onStopTrackingTouch(SeekBar arg0) {
-                // TODO Auto-generated method stub
-            }
-
-            public void onStartTrackingTouch(SeekBar arg0) {
-                // TODO Auto-generated method stub
-            }
-
+            @Override
             public void onProgressChanged(SeekBar seekbar, int value, boolean arg2) {
+
                 SeekBarWithText bar = (SeekBarWithText) seekbar; // casting seekbar so we can set text
 
                 // Update the value on the bar
@@ -205,6 +210,14 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
 
                 // Update the menu items
                 updateMenu(f, value);
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekbar) {
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekbar) {
             }
         });
 
@@ -249,11 +262,13 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
         listDataHeader.add("Panera Bread");
         listDataHeader.add("Subway");
         listDataHeader.add("McDonalds");
+        listDataHeader.add("Mia Za's");
 
         listHeaderImage.add("chinese");
         listHeaderImage.add("bread");
         listHeaderImage.add("sandwich");
         listHeaderImage.add("fastfood");
+        listHeaderImage.add("italian");
 
         // Adding menu data
         List<RestMenuItem> panda = new ArrayList<RestMenuItem>();
@@ -268,18 +283,24 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
 
         List<RestMenuItem> subway = new ArrayList<RestMenuItem>();
         subway.add(new RestMenuItem("Footlong Subway Club", 7.75, 620, 46));
-        subway.add(new RestMenuItem("6\" Italian B.M.T.", 3.75, 410, 20));
-        subway.add(new RestMenuItem("6\" Meatball Sub", 4.25, 480, 21));
+        subway.add(new RestMenuItem("6\" Italian B.M.T.", 6.75, 810, 40));
+        subway.add(new RestMenuItem("6\" Meatball Sub", 3.75, 480, 21));
 
         List<RestMenuItem> mcD = new ArrayList<RestMenuItem>();
         mcD.add(new RestMenuItem("Big Mac", 3.99, 540, 25));
         mcD.add(new RestMenuItem("10-piece McNuggent", 4.49, 470, 22));
         mcD.add(new RestMenuItem("Large Fries", 1.89, 510, 2));
 
+        List<RestMenuItem> zas = new ArrayList<RestMenuItem>();
+        zas.add(new RestMenuItem("Fettuccine Alfredo", 6.00, 797, 32));
+        zas.add(new RestMenuItem("Veggie Lover Panini", 7.00, 744, 10));
+        zas.add(new RestMenuItem("Buffalo Chicken Pizza", 7.00, 984, 48));
+
         listDataChild.put(listDataHeader.get(0), panda); // Header, Child data
         listDataChild.put(listDataHeader.get(1), panera);
         listDataChild.put(listDataHeader.get(2), subway);
         listDataChild.put(listDataHeader.get(3), mcD);
+        listDataChild.put(listDataHeader.get(4), zas);
     }
 
 
