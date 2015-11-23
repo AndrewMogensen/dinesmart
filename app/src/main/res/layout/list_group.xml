@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="60dp"
+    android:orientation="vertical"
+    android:padding="8dp"
+    android:background="#ffffff">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+        <TextView
+            android:id="@+id/lblListHeader"
+            android:layout_width="120dp"
+            android:layout_height="match_parent"
+            android:paddingLeft="?android:attr/expandableListPreferredItemPaddingLeft"
+            android:gravity="center_vertical"
+            android:textColor="#595959" />
+        <ImageView
+            android:layout_marginLeft="120dp"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:id="@+id/foodType"/>
+        <ImageView
+            android:layout_marginLeft="170dp"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/review"/>
+        <ImageView
+            android:layout_marginLeft="260dp"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/page"
+            android:id="@+id/restaurantPage"/>
+
+        <ImageView
+            android:layout_marginLeft="310dp"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/navigate"/>
+    </RelativeLayout>
+
+</LinearLayout>

@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">DineSmart</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_panda_express_page">PandaExpressPageActivity</string>
+    <string name="title_activity_subway">SubwayActivity</string>
+    <string name="title_activity_mc_donalds">McDonaldsActivity</string>
+    <string name="title_activity_mia_za">MiaZaActivity</string>
+    <string name="title_activity_panera_bread">PaneraBreadActivity</string>
+
+</resources>
