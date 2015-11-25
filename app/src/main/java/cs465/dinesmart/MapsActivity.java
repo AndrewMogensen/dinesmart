@@ -33,6 +33,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import android.graphics.Color;
@@ -52,6 +53,7 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
     HashMap<String, List<RestMenuItem>> listDataChild; //maps Restaurant names to a list of menu items.
     HashMap<filter, View> filterIndicators;
     HashMap<filter, SeekBarWithText> filterSeekbars;
+    Marker[] mapMarkers = new Marker[5];
 
     public class filter {
         String name;
@@ -96,7 +98,7 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
         // preparing list data
         prepareListData();
 
-        listAdapter = new ExpandableListAdapter(this, listDataHeader, listHeaderImage, listDataChild);
+        listAdapter = new ExpandableListAdapter(this,this, listDataHeader, listHeaderImage, listDataChild);
 
         // setting list adapter
         expListView.setAdapter(listAdapter);
@@ -321,14 +323,37 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
         // Add a marker in UIUC and move the camera
         LatLng uiuc = new LatLng(40.1105, -88.2284);
         //mMap.addMarker(new MarkerOptions().position(uiuc).title("Marker in UIUC"));
-        mMap.addMarker(new MarkerOptions().position(new LatLng(40.110408,-88.229809)).title("McDonald's"));
-        mMap.addMarker(new MarkerOptions().position(new LatLng(40.110564,-88.229608)).title("Subway"));
-        mMap.addMarker(new MarkerOptions().position(new LatLng(40.110429,-88.229053)).title("Panda Express"));
-        mMap.addMarker(new MarkerOptions().position(new LatLng(40.110609,-88.229400)).title("Panera Bread"));
-        mMap.addMarker(new MarkerOptions().position(new LatLng(40.110080,-88.229234)).title("Mia Za's"));
+        Marker mcDonalds = mMap.addMarker(new MarkerOptions().position(new LatLng(40.110408,-88.229809)).title("McDonald's"));
+        Marker subway = mMap.addMarker(new MarkerOptions().position(new LatLng(40.110564,-88.229608)).title("Subway"));
+        Marker panda = mMap.addMarker(new MarkerOptions().position(new LatLng(40.110429,-88.229053)).title("Panda Express"));
+        Marker panera = mMap.addMarker(new MarkerOptions().position(new LatLng(40.110609,-88.229400)).title("Panera Bread"));
+        Marker miaZa = mMap.addMarker(new MarkerOptions().position(new LatLng(40.110080,-88.229234)).title("Mia Za's"));
+        mapMarkers[0]=(mcDonalds);
+        mapMarkers[1]=(subway);
+        mapMarkers[2]=(panda);
+        mapMarkers[3]=(panera);
+        mapMarkers[4]=(miaZa);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(uiuc));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(16));
     }
+
+    public void visibleMarkers(String restaurant){
+        Marker temp = mMap.addMarker(new MarkerOptions().position(new LatLng(40.110408,-88.229809)).title("Blank").visible(false));
+        for (Marker rest : mapMarkers){
+            if (rest.getTitle().equals(restaurant)){
+                rest.setVisible(true);
+                temp = rest;
+            }
+            else{
+                rest.setVisible(false);
+            }
+        }
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(temp.getPosition()));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(18));
+
+    }
+
     private static void setUpMap()
     {
         mMap.setMyLocationEnabled(true);

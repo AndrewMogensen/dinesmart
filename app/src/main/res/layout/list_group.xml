@@ -37,7 +37,8 @@
             android:layout_marginLeft="310dp"
             android:layout_width="40dp"
             android:layout_height="match_parent"
-            android:src="@drawable/navigate"/>
+            android:src="@drawable/navigate"
+            android:id = "@+id/navigationButton"/>
     </RelativeLayout>
 
 </LinearLayout>

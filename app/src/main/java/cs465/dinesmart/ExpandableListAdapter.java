@@ -14,9 +14,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import cs465.dinesmart.MapsActivity;
+
 public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
     private Context _context;
+    private MapsActivity _ma;
     private List<String> restaurantsOriginal;
     private List<String> restaurantsCurrent;
     private List<String> _listHeaderImage;
@@ -24,10 +27,12 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     private HashMap<String, List<RestMenuItem>> menuDataOriginal;
     private HashMap<String, List<RestMenuItem>> menuDataCurrent;
 
-    public ExpandableListAdapter(Context context, List<String> listDataHeader,
+    public ExpandableListAdapter(Context context, MapsActivity ma, List<String> listDataHeader,
                                  List<String> listHeaderImage, HashMap<String, List<RestMenuItem>> listChildData) {
 
         this._context = context;
+
+        this._ma = ma;
 
         this.restaurantsOriginal = new ArrayList<String>();
         restaurantsOriginal.addAll(listDataHeader);
@@ -124,6 +129,8 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         ImageView imgListChild = (ImageView) convertView
                 .findViewById(R.id.foodType);
         ImageView restPageNav = (ImageView) convertView.findViewById(R.id.restaurantPage);
+        ImageView navButton = (ImageView) convertView.findViewById(R.id.navigationButton);
+
         if (imagename == "chinese") {
             imgListChild.setImageResource(R.drawable.chinese);
             restPageNav.setOnClickListener(new View.OnClickListener() {
@@ -131,6 +138,11 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                 public void onClick(View v) {
                     Intent intent = new Intent(v.getContext(), PandaExpressPageActivity.class);
                     v.getContext().startActivity(intent);
+                }
+            });
+            navButton.setOnClickListener(new View.OnClickListener(){
+                public void onClick(View v){
+                    _ma.visibleMarkers("Panda Express");
                 }
             });
         }
@@ -143,6 +155,11 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                     v.getContext().startActivity(intent);
                 }
             });
+            navButton.setOnClickListener(new View.OnClickListener(){
+                public void onClick(View v){
+                    _ma.visibleMarkers("Panera Bread");
+                }
+            });
         }
         if (imagename == "sandwich") {
             imgListChild.setImageResource(R.drawable.sandwich);
@@ -151,6 +168,11 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                 public void onClick(View v) {
                     Intent intent = new Intent(v.getContext(), SubwayActivity.class);
                     v.getContext().startActivity(intent);
+                }
+            });
+            navButton.setOnClickListener(new View.OnClickListener(){
+                public void onClick(View v){
+                    _ma.visibleMarkers("Subway");
                 }
             });
         }
@@ -163,6 +185,11 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                     v.getContext().startActivity(intent);
                 }
             });
+            navButton.setOnClickListener(new View.OnClickListener(){
+                public void onClick(View v){
+                    _ma.visibleMarkers("McDonald's");
+                }
+            });
         }
         if (imagename == "italian") {
             imgListChild.setImageResource(R.drawable.italian);
@@ -171,6 +198,11 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                 public void onClick(View v) {
                     Intent intent = new Intent(v.getContext(), MiaZaActivity.class);
                     v.getContext().startActivity(intent);
+                }
+            });
+            navButton.setOnClickListener(new View.OnClickListener(){
+                public void onClick(View v){
+                    _ma.visibleMarkers("Mia Za's");
                 }
             });
         }
