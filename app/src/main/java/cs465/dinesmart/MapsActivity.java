@@ -320,15 +320,25 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
 
         // Add a marker in UIUC and move the camera
         LatLng uiuc = new LatLng(40.1105, -88.2284);
-        mMap.addMarker(new MarkerOptions().position(uiuc).title("Marker in UIUC"));
+        //mMap.addMarker(new MarkerOptions().position(uiuc).title("Marker in UIUC"));
+        mMap.addMarker(new MarkerOptions().position(new LatLng(40.110408,-88.229809)).title("McDonald's"));
+        mMap.addMarker(new MarkerOptions().position(new LatLng(40.110564,-88.229608)).title("Subway"));
+        mMap.addMarker(new MarkerOptions().position(new LatLng(40.110429,-88.229053)).title("Panda Express"));
+        mMap.addMarker(new MarkerOptions().position(new LatLng(40.110609,-88.229400)).title("Panera Bread"));
+        mMap.addMarker(new MarkerOptions().position(new LatLng(40.110080,-88.229234)).title("Mia Za's"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(uiuc));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(14));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(16));
     }
     private static void setUpMap()
     {
         mMap.setMyLocationEnabled(true);
-        mMap.addMarker(new MarkerOptions().position(new LatLng(40.1105, -88.2284)).title("Marker in UIUC"));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(14));
+        //mMap.addMarker(new MarkerOptions().position(new LatLng(40.1105, -88.2284)).title("Marker in UIUC"));
+        /*mMap.addMarker(new MarkerOptions().position(new LatLng(40.1100,-88.2296)).title("McDonalds"));
+        mMap.addMarker(new MarkerOptions().position(new LatLng(40.2263,-88.2185)).title("Subway"));
+        mMap.addMarker(new MarkerOptions().position(new LatLng(40.1104,-88.2280)).title("Panda Express"));
+        mMap.addMarker(new MarkerOptions().position(new LatLng(40.1103,-88.2290)).title("Panera Bread"));
+        mMap.addMarker(new MarkerOptions().position(new LatLng(40.1101,-88.2291)).title("Mia Za's"));*/
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(16));
     }
 
     @Override
