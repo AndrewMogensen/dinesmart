@@ -29,6 +29,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import android.os.Bundle;
+import android.app.Activity;
+import android.app.SearchManager;
+import android.content.Context;
+import android.view.Menu;
+import android.widget.ExpandableListView;
+import android.widget.SearchView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -44,9 +51,11 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
-public class MapsActivity extends ActionBarActivity implements OnMapReadyCallback,NavigationView.OnNavigationItemSelectedListener {
+public class MapsActivity extends ActionBarActivity implements OnMapReadyCallback,NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener, SearchView.OnCloseListener {
 
     private static GoogleMap mMap;
+
+    private SearchView search;
 
     ExpandableListAdapter listAdapter;
     ExpandableListView expListView;
@@ -176,7 +185,25 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
 
     protected void updateMenu(filter f, int value) {
         filters.get(filters.indexOf(f)).currentValue = value;
-        listAdapter.filterData(filters);
+        listAdapter.filterData(filters, "");
+    }
+
+    @Override
+    public boolean onClose() {
+        listAdapter.filterData(filters, "");
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String query) {
+        listAdapter.filterData(filters, query);
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        listAdapter.filterData(filters, query);
+        return false;
     }
 
     private void setupSeekbar(final filter f) {
@@ -243,6 +270,13 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        search = (SearchView) findViewById(R.id.searchView);
+        search.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        search.setIconifiedByDefault(false);
+        search.setOnQueryTextListener(this);
+        search.setOnCloseListener(this);
+
         filters = new ArrayList<filter>();
         filters.add(new filter("Protein", 80, "", "g", false));
         filters.add(new filter("Calories", 1500, "", "", true));
@@ -255,7 +289,9 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
         setupListView();
         setupDrawer();
         setupFilters();
+
     }
+
     private void prepareListData() {
         listDataHeader = new ArrayList<String>();
         listHeaderImage = new ArrayList<String>();

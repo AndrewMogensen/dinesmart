@@ -116,9 +116,9 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         String headerTitle = (String) getGroup(groupPosition);
         String imagename = (String) getFoodType(groupPosition);
         if (convertView == null) {
-            LayoutInflater infalInflater = (LayoutInflater) this._context
+            LayoutInflater layoutInflater = (LayoutInflater) this._context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = infalInflater.inflate(R.layout.list_group, null);
+            convertView = layoutInflater.inflate(R.layout.list_group, null);
         }
 
         TextView lblListHeader = (TextView) convertView
@@ -210,7 +210,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         return convertView;
     }
 
-    public void filterData(List<cs465.dinesmart.MapsActivity.filter> filters) {
+    public void filterData(List<cs465.dinesmart.MapsActivity.filter> filters, String query) {
 
         restaurantsCurrent.clear();
         menuDataCurrent.clear();
@@ -225,8 +225,10 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                 }
             }
             if (newList.size() > 0) {
-                restaurantsCurrent.add(rest);
-                menuDataCurrent.put(rest, newList);
+                if (query.length() == 0 || rest.toLowerCase().contains(query.toLowerCase())) {
+                    restaurantsCurrent.add(rest);
+                    menuDataCurrent.put(rest, newList);
+                }
             }
         }
         notifyDataSetChanged();
