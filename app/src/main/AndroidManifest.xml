@@ -63,6 +63,11 @@
             android:label="@string/title_activity_panera_bread"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
+        <activity
+            android:name=".Home_Screen"
+            android:label="Home_Screen" >
+        </activity>
+
     </application>
 
 </manifest>

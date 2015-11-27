@@ -1,6 +1,7 @@
 package cs465.dinesmart;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
@@ -14,6 +15,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -411,6 +413,23 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
             }
         });
 
+        Button location_btn = (Button) findViewById(R.id.location_button);
+        location_btn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                TextView myTextView = (TextView) findViewById(R.id.location_text);
+                myTextView.setText("rawr");
+                myTextView.setBackgroundColor(Color.RED);
+            }
+        });
+
+        ImageButton home_btn = (ImageButton) findViewById(R.id.home_button);
+        home_btn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Intent i = new Intent(MapsActivity.this, Home_Screen.class);
+                startActivity(i);
+            }
+        });
+
         return true;
     }
 
@@ -420,6 +439,9 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+
+
+
 
         return super.onOptionsItemSelected(item);
     }

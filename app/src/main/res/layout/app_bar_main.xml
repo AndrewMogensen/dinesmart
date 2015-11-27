@@ -32,18 +32,21 @@
                 <!--android:onClick="display"/>-->
 
                 <TextView
+                    android:id="@+id/location_text"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:layout_weight="1"
-                    android:text=" Location" />
+                    android:text=" Champaign, IL" />
 
                 <Button
+                    android:id="@+id/location_button"
                     android:layout_width="10dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Change" />
 
                 <ImageButton
+                    android:id= "@+id/home_button"
                     android:layout_width="5dp"
                     android:layout_height="50dp"
                     android:layout_weight="1"
