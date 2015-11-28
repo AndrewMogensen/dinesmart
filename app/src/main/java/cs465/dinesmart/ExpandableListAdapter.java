@@ -229,17 +229,15 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             List<RestMenuItem> newList = new ArrayList<RestMenuItem>();
             for (RestMenuItem menuItem : itemList) {
                 if (shouldAdd(filters, menuItem)) {
-                    newList.add(menuItem);
+                    if (query.length() == 0 || menuItem.getItemName().toLowerCase().contains(query.toLowerCase()) ||
+                            rest.toLowerCase().contains(query.toLowerCase())) {
+                        newList.add(menuItem);
+                    }
                 }
             }
             if (newList.size() > 0) {
-                if (query.length() == 0 || rest.toLowerCase().contains(query.toLowerCase())) {
-                    restaurantsCurrent.add(rest);
-                    menuDataCurrent.put(rest, newList);
-                }
-                else {
-                    //implement food item search
-                }
+                restaurantsCurrent.add(rest);
+                menuDataCurrent.put(rest, newList);
             }
         }
         notifyDataSetChanged();

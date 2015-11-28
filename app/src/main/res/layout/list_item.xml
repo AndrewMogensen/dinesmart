@@ -10,7 +10,7 @@
 
         <TextView
             android:id="@+id/lblListItem"
-            android:layout_width="180dp"
+            android:layout_width="190dp"
             android:layout_height="wrap_content"
             android:paddingBottom="5dp"
             android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft"
@@ -23,7 +23,7 @@
             android:paddingBottom="5dp"
             android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft"
             android:paddingTop="5dp"
-            android:layout_marginLeft="190dp"/>
+            android:layout_marginLeft="200dp"/>
         <TextView
             android:id="@+id/lblItemCalories"
             android:layout_width="fill_parent"
@@ -31,7 +31,7 @@
             android:paddingBottom="5dp"
             android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft"
             android:paddingTop="5dp"
-            android:layout_marginLeft="245dp"/>
+            android:layout_marginLeft="250dp"/>
 
     </RelativeLayout>
 

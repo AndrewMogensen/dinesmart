@@ -241,7 +241,7 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
 
     protected void updateMenu(filter f, int value) {
         f.currentValue = value;
-        listAdapter.filterData(activeFilters, "");
+        listAdapter.filterData(activeFilters, search.getQuery().toString());
     }
 
     @Override
