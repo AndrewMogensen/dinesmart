@@ -58,7 +58,6 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
     ExpandableListAdapter listAdapter;
     ExpandableListView expListView;
     List<String> listDataHeader;
-    List<String> listHeaderImage;
     HashMap<String, List<RestMenuItem>> listDataChild; //maps Restaurant names to a list of menu items.
     HashMap<filter, View> filterIndicators;
     HashMap<filter, SeekBarWithText> filterSeekbars;
@@ -105,7 +104,7 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
         // preparing list data
         prepareListData();
 
-        listAdapter = new ExpandableListAdapter(this,this, listDataHeader, listHeaderImage, listDataChild);
+        listAdapter = new ExpandableListAdapter(this,this, listDataHeader, listDataChild);
 
         // setting list adapter
         expListView.setAdapter(listAdapter);
@@ -414,7 +413,6 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
 
     private void prepareListData() {
         listDataHeader = new ArrayList<String>();
-        listHeaderImage = new ArrayList<String>();
         listDataChild = new HashMap<String, List<RestMenuItem>>();
 
         // Adding child data
@@ -423,12 +421,6 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
         listDataHeader.add("Subway");
         listDataHeader.add("McDonalds");
         listDataHeader.add("Mia Za's");
-
-        listHeaderImage.add("chinese");
-        listHeaderImage.add("bread");
-        listHeaderImage.add("sandwich");
-        listHeaderImage.add("fastfood");
-        listHeaderImage.add("italian");
 
         // Adding menu data
         List<RestMenuItem> panda = new ArrayList<RestMenuItem>();

@@ -22,13 +22,11 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     private MapsActivity _ma;
     private List<String> restaurantsOriginal;
     private List<String> restaurantsCurrent;
-    private List<String> _listHeaderImage;
     // child data in format of Restaurant name, menuItem list.
     private HashMap<String, List<RestMenuItem>> menuDataOriginal;
     private HashMap<String, List<RestMenuItem>> menuDataCurrent;
 
-    public ExpandableListAdapter(Context context, MapsActivity ma, List<String> listDataHeader,
-                                 List<String> listHeaderImage, HashMap<String, List<RestMenuItem>> listChildData) {
+    public ExpandableListAdapter(Context context, MapsActivity ma, List<String> listDataHeader, HashMap<String, List<RestMenuItem>> listChildData) {
 
         this._context = context;
 
@@ -51,7 +49,6 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             newList.addAll(listChildData.get(rest));
             menuDataCurrent.put(rest, newList);
         }
-        this._listHeaderImage = listHeaderImage;
     }
 
     @Override
@@ -104,10 +101,6 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         return this.restaurantsCurrent.get(groupPosition);
     }
 
-    public Object getFoodType(int groupPosition) {
-        return this._listHeaderImage.get(groupPosition);
-    }
-
     @Override
     public int getGroupCount() {
         return this.restaurantsCurrent.size();
@@ -122,7 +115,6 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     public View getGroupView(int groupPosition, boolean isExpanded,
                              View convertView, ViewGroup parent) {
         String headerTitle = (String) getGroup(groupPosition);
-        String imagename = (String) getFoodType(groupPosition);
         if (convertView == null) {
             LayoutInflater layoutInflater = (LayoutInflater) this._context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -139,7 +131,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         ImageView restPageNav = (ImageView) convertView.findViewById(R.id.restaurantPage);
         ImageView navButton = (ImageView) convertView.findViewById(R.id.navigationButton);
 
-        if (imagename == "chinese") {
+        if (headerTitle.toLowerCase().contains("panda express")) {
             imgListChild.setImageResource(R.drawable.chinese);
             restPageNav.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -154,7 +146,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                 }
             });
         }
-        if (imagename == "bread") {
+        if (headerTitle.toLowerCase().contains("panera")) {
             imgListChild.setImageResource(R.drawable.bread);
             restPageNav.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -169,7 +161,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                 }
             });
         }
-        if (imagename == "sandwich") {
+        if (headerTitle.toLowerCase().contains("subway")) {
             imgListChild.setImageResource(R.drawable.sandwich);
             restPageNav.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -184,7 +176,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                 }
             });
         }
-        if (imagename == "fastfood") {
+        if (headerTitle.toLowerCase().contains("mcdonal")) {
             imgListChild.setImageResource(R.drawable.fastfood);
             restPageNav.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -199,7 +191,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                 }
             });
         }
-        if (imagename == "italian") {
+        if (headerTitle.toLowerCase().contains("mia")) {
             imgListChild.setImageResource(R.drawable.italian);
             restPageNav.setOnClickListener(new View.OnClickListener() {
                 @Override
