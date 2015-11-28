@@ -5,7 +5,6 @@
     android:layout_width="100dp"
     android:layout_height="100dp">
 
-
     <ImageButton
         android:id="@+id/button"
         android:layout_width="match_parent"
@@ -13,6 +12,19 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:background="@drawable/lt_indicator_circle" />
+
+    <ImageButton
+        android:id="@+id/remove"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:background="@drawable/minus"/>
+
+    <ImageButton
+        android:id="@+id/toggle"
+        android:layout_marginLeft="80dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:background="@drawable/refresh"/>
 
     <TextView
         android:id="@+id/indicator_name"

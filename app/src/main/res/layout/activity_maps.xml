@@ -24,7 +24,8 @@
         <RelativeLayout
             android:layout_width="100dp"
             android:layout_height="match_parent"
-            android:background="@android:color/darker_gray">
+            android:background="@android:color/darker_gray"
+            android:id="@+id/relativeLayout">
 
             <LinearLayout
                 android:id="@+id/left_drawer_linear"
@@ -34,12 +35,22 @@
                 android:weightSum="1">
 
                 <ImageButton
+                    android:id="@+id/addFilter"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:background="@drawable/addcircle"/>
 
             </LinearLayout>
         </RelativeLayout>
+
+        <GridLayout
+            android:id="@+id/newFilterDrawer"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/relativeLayout"
+            android:background="@android:color/background_dark"></GridLayout>
     </RelativeLayout>
 </android.support.v4.widget.DrawerLayout>
 

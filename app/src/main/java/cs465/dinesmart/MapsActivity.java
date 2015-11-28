@@ -17,6 +17,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ExpandableListView;
+import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -29,12 +30,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import android.os.Bundle;
-import android.app.Activity;
 import android.app.SearchManager;
-import android.content.Context;
-import android.view.Menu;
-import android.widget.ExpandableListView;
 import android.widget.SearchView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -56,6 +52,8 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
     private static GoogleMap mMap;
 
     private SearchView search;
+
+    private static int MAX_ACTIVE_FILTERS = 4;
 
     ExpandableListAdapter listAdapter;
     ExpandableListView expListView;
@@ -81,19 +79,17 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
             this.prefix = prefix;
             this.lessThan = lessThan;
             this.suffix = suffix;
-            if (name.contains("rotein")){
+
+            if (lessThan) {
+                this.currentValue = maxValue;
+            } else {
                 this.currentValue = 0;
-            }
-            else if (name.contains("alories")){
-                this.currentValue = 1500;
-            }
-            else if (name.contains("rice")){
-                this.currentValue = 50;
             }
         }
     }
 
-    List<filter> filters;
+    List<filter> inactiveFilters;
+    List<filter> activeFilters;
 
     private void setupMapFragment() {
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -120,20 +116,31 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
         setSupportActionBar(toolbar);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
+
+            /** Called when a drawer has settled in a completely closed state. */
+            public void onDrawerClosed(View view) {
+                super.onDrawerClosed(view);
+                GridLayout newFilterDrawer = (GridLayout) findViewById(R.id.newFilterDrawer);
+                newFilterDrawer.setVisibility(View.GONE);
+            }
+        };
+
         drawer.setDrawerListener(toggle);
         toggle.syncState();
     }
 
-    private void addFilterIndicatorToLayout(final filter f, LinearLayout indicatorLayout) {
+    private void addFilterIndicatorToActiveFilters(final filter f) {
+        LinearLayout indicatorLayout = (LinearLayout) findViewById(R.id.left_drawer_linear);
+
         // Inflate the indicator
-        LayoutInflater inflater = (LayoutInflater)   this.getSystemService(LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
 
         int indicatorTemplate = f.lessThan ? R.layout.lt_indicator : R.layout.gt_indicator;
         final View indicator = inflater.inflate(indicatorTemplate, indicatorLayout, false);
 
         // Set the text up
-                ((TextView) indicator.findViewById(R.id.indicator_name)).setText(f.name);
+        ((TextView) indicator.findViewById(R.id.indicator_name)).setText(f.name);
         ((TextView) indicator.findViewById(R.id.sub_text)).setText(f.prefix + f.maxValue + f.suffix);
 
         // Add it to the layout
@@ -174,35 +181,79 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
                 return true;
             }
         });
+
+        ((ImageButton) indicator.findViewById(R.id.remove)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removeActiveFilter(f);
+            }
+        });
+
+        final Context context = this;
+        ((ImageButton) indicator.findViewById(R.id.toggle)).setOnClickListener(new View.OnClickListener() {
+            SeekBarWithText seekBar = filterSeekbars.get(f);
+
+            @Override
+            public void onClick(View v) {
+                f.lessThan = !f.lessThan;
+
+                View indicatorButton = indicator.findViewById(R.id.button);
+                if (f.lessThan) {
+                    indicatorButton.setBackground(ContextCompat.getDrawable(context, R.drawable.lt_indicator_circle));
+                } else {
+                    indicatorButton.setBackground(ContextCompat.getDrawable(context, R.drawable.gt_indicator_circle));
+                }
+
+                int thumbTemplate = f.lessThan ? R.drawable.lt_indicator_circle : R.drawable.gt_indicator_circle;
+                Drawable thumb = ContextCompat.getDrawable(context, thumbTemplate);
+                seekBar.setThumb(thumb);
+
+                updateMenu(f, f.currentValue);
+            }
+        });
+    }
+
+    private void removeActiveFilter(filter f) {
+        View indicatorToRemove = filterIndicators.get(f);
+        ((LinearLayout) indicatorToRemove.getParent()).removeView(indicatorToRemove);
+
+        filterSeekbars.remove(f);
+        filterIndicators.remove(f);
+
+        activeFilters.remove(f);
+        inactiveFilters.add(f);
+
+        addFilterToNewFiltersDrawer(f);
+
+        updateMenu(f, f.lessThan ? f.maxValue : 0);
     }
 
     private void setupIndicators() {
-        LinearLayout indicatorLayout = (LinearLayout) findViewById(R.id.left_drawer_linear);
-        for (filter f : filters) {
-            addFilterIndicatorToLayout(f, indicatorLayout);
+        for (filter f : activeFilters) {
+            addFilterIndicatorToActiveFilters(f);
         }
     }
 
     protected void updateMenu(filter f, int value) {
-        filters.get(filters.indexOf(f)).currentValue = value;
-        listAdapter.filterData(filters, "");
+        f.currentValue = value;
+        listAdapter.filterData(activeFilters, "");
     }
 
     @Override
     public boolean onClose() {
-        listAdapter.filterData(filters, "");
+        listAdapter.filterData(activeFilters, "");
         return false;
     }
 
     @Override
     public boolean onQueryTextChange(String query) {
-        listAdapter.filterData(filters, query);
+        listAdapter.filterData(activeFilters, query);
         return false;
     }
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        listAdapter.filterData(filters, query);
+        listAdapter.filterData(activeFilters, query);
         return false;
     }
 
@@ -256,12 +307,67 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
     }
 
     private void setupSeekbars() {
-        for (filter f : filters) {
+        for (filter f : activeFilters) {
             setupSeekbar(f);
         }
     }
 
+    private void setupNewFilterDrawer() {
+        for (filter f : inactiveFilters) {
+            addFilterToNewFiltersDrawer(f);
+        }
+
+        GridLayout newFilterDrawer = (GridLayout) findViewById(R.id.newFilterDrawer);
+        newFilterDrawer.setVisibility(View.GONE);
+    }
+
+    private void removeFilterFromNewFilters(final View filterToRemove, final filter f) {
+        ((GridLayout) filterToRemove.getParent()).removeView(filterToRemove);
+
+        activeFilters.add(f);
+        inactiveFilters.remove(f);
+    }
+
+    private void addFilterToNewFiltersDrawer(final filter f) {
+        GridLayout newFilterDrawer = (GridLayout) findViewById(R.id.newFilterDrawer);
+        newFilterDrawer.setColumnCount(3);
+        newFilterDrawer.setRowCount(3);
+
+        // Inflate the indicator
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
+
+        int indicatorTemplate = f.lessThan ? R.layout.lt_indicator : R.layout.gt_indicator;
+        final View indicator = inflater.inflate(indicatorTemplate, newFilterDrawer, false);
+
+        // Set the text up
+        ((TextView) indicator.findViewById(R.id.indicator_name)).setText(f.name);
+        ((TextView) indicator.findViewById(R.id.sub_text)).setText("");
+
+        // Add it to the layout
+        newFilterDrawer.addView(indicator, 0);
+
+        ((ImageButton) indicator.findViewById(R.id.button)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                if (activeFilters.size() < MAX_ACTIVE_FILTERS) {
+                    addFilterIndicatorToActiveFilters(f);
+                    setupSeekbar(f);
+                    removeFilterFromNewFilters(indicator, f);
+                }
+            }
+        });
+    }
+
     private void setupFilters() {
+        setupNewFilterDrawer();
+
+        ImageButton addFilterButton = (ImageButton) findViewById(R.id.addFilter);
+        addFilterButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                GridLayout newFilterDrawer = (GridLayout) findViewById(R.id.newFilterDrawer);
+                newFilterDrawer.setVisibility(View.VISIBLE);
+            }
+        });
+
         setupSeekbars();
         setupIndicators();
     }
@@ -277,10 +383,15 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
         search.setOnQueryTextListener(this);
         search.setOnCloseListener(this);
 
-        filters = new ArrayList<filter>();
-        filters.add(new filter("Protein", 80, "", "g", false));
-        filters.add(new filter("Calories", 1500, "", "", true));
-        filters.add(new filter("Price", 50, "$", "", true));
+        activeFilters = new ArrayList<filter>();
+        activeFilters.add(new filter("Protein", 80, "", "g", false));
+        activeFilters.add(new filter("Calories", 1500, "", "", true));
+        activeFilters.add(new filter("Price", 50, "$", "", true));
+
+        inactiveFilters = new ArrayList<filter>();
+        inactiveFilters.add(new filter("Sugar", 80, "", "g", true));
+        inactiveFilters.add(new filter("Sodium", 20, "", "g", true));
+        inactiveFilters.add(new filter("Caffeine", 300, "", "mg", true));
 
         filterIndicators = new HashMap<filter, View>();
         filterSeekbars = new HashMap<filter, SeekBarWithText>();
@@ -444,8 +555,15 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
         final RelativeLayout drawer = (RelativeLayout) findViewById(R.id.left_drawer);
         drawer.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                DrawerLayout transparentFrame = (DrawerLayout) findViewById(R.id.drawer_layout);
-                transparentFrame.closeDrawer(Gravity.LEFT);
+                // If the new filter drawer is open, it should just close that
+                GridLayout newFilterDrawer = (GridLayout) findViewById(R.id.newFilterDrawer);
+
+                if (newFilterDrawer.getVisibility() == View.VISIBLE) {
+                    newFilterDrawer.setVisibility(View.GONE);
+                } else {
+                    DrawerLayout transparentFrame = (DrawerLayout) findViewById(R.id.drawer_layout);
+                    transparentFrame.closeDrawer(Gravity.LEFT);
+                }
             }
         });
 
