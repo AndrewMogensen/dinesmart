@@ -186,6 +186,11 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
             @Override
             public void onClick(View v) {
                 removeActiveFilter(f);
+
+                // At up to three we can have the add button
+                if (activeFilters.size() <= 3) {
+                    findViewById(R.id.addFilter).setVisibility(View.VISIBLE);
+                }
             }
         });
 
@@ -352,6 +357,10 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
                     addFilterIndicatorToActiveFilters(f);
                     setupSeekbar(f);
                     removeFilterFromNewFilters(indicator, f);
+                }
+
+                if (activeFilters.size() == 4) {
+                    findViewById(R.id.addFilter).setVisibility(View.GONE);
                 }
             }
         });
