@@ -1,5 +1,6 @@
 package cs465.dinesmart;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -8,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 public class PaneraBreadActivity extends ActionBarActivity {
@@ -25,6 +27,15 @@ public class PaneraBreadActivity extends ActionBarActivity {
         String [] bagelFood = {"Cranberry Walnut Bagel", "Pumpkin Pie Bagel", "Everything Bagel","French Toast Bagel"};
         String [] sandwichFood = {"Roasted Turkey and Avocado BLT","Sierra Turkey Sandwich","Asiago Steak Sandwich","Classic Grilled Cheese"};
         String [] saladFood = {"Thai Chicken Salad","Chicken Cobb With Avocado","Power Kale Caesar Salad With Chicken","Greek Salad"};
+
+
+        ImageButton home_btn = (ImageButton) findViewById(R.id.home_button_panera);
+        home_btn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Intent i = new Intent(PaneraBreadActivity.this, Home_Screen.class);
+                startActivity(i);
+            }
+        });
 
 
         ArrayAdapter<String> soupAdapter = new ArrayAdapter<String>(

@@ -1,5 +1,6 @@
 package cs465.dinesmart;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -7,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 public class MiaZaActivity extends AppCompatActivity {
@@ -23,6 +25,15 @@ public class MiaZaActivity extends AppCompatActivity {
         String [] paniniFood = {"Pesto Vegetarian", "Classic Italian", "Barbeque Chicken","Honey Ham"};
         String [] pizzaFood = {"Hawaiian","Tuscan White","Chicken Fajita","Buffalo Chicken"};
         String [] saladFood = {"Traditional Greek","Garden Salad","Caesar Salad","Strawberry Romaine"};
+
+        ImageButton home_btn = (ImageButton) findViewById(R.id.home_button_miaZa);
+        home_btn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Intent i = new Intent(MiaZaActivity.this, Home_Screen.class);
+                startActivity(i);
+            }
+        });
+
 
 
         ArrayAdapter<String> pastaAdapter = new ArrayAdapter<String>(
