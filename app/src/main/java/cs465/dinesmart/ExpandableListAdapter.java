@@ -70,7 +70,6 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                              boolean isLastChild, View convertView, ViewGroup parent) {
 
         final RestMenuItem childItem = getChild(groupPosition, childPosition);
-        String childText = childItem.getItemName();
 
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this._context
@@ -78,10 +77,19 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             convertView = infalInflater.inflate(R.layout.list_item, null);
         }
 
+        String itemName = childItem.getItemName();
         TextView txtListChild = (TextView) convertView
                 .findViewById(R.id.lblListItem);
+        txtListChild.setText(itemName);
 
-        txtListChild.setText(childText);
+        String itemPrice = String.valueOf(childItem.getPrice());
+        TextView txtItemPrice = (TextView) convertView.findViewById(R.id.lblItemPrice);
+        txtItemPrice.setText("$" + itemPrice);
+
+        String itemCalories = String.valueOf(childItem.getCalories());
+        TextView txtItemCalories = (TextView) convertView.findViewById(R.id.lblItemCalories);
+        txtItemCalories.setText(itemCalories + "cal");
+
         return convertView;
     }
 
@@ -228,6 +236,9 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                 if (query.length() == 0 || rest.toLowerCase().contains(query.toLowerCase())) {
                     restaurantsCurrent.add(rest);
                     menuDataCurrent.put(rest, newList);
+                }
+                else {
+                    //implement food item search
                 }
             }
         }
