@@ -471,7 +471,10 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
         mMap = googleMap;
 
         // Add a marker in UIUC and move the camera
-        LatLng uiuc = new LatLng(40.1105, -88.2284);
+        double uiucLat = 40.1105;
+        double uiucLong = -88.2284;
+
+        LatLng uiuc = new LatLng(uiucLat - 0.04450, uiucLong);
         //mMap.addMarker(new MarkerOptions().position(uiuc).title("Marker in UIUC"));
         Marker mcDonalds = mMap.addMarker(new MarkerOptions().position(new LatLng(40.110408,-88.229809)).title("McDonald's"));
         Marker subway = mMap.addMarker(new MarkerOptions().position(new LatLng(40.110564,-88.229608)).title("Subway"));
