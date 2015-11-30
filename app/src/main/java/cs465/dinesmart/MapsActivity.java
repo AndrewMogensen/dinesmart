@@ -195,10 +195,9 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
 
         final Context context = this;
         ((ImageButton) indicator.findViewById(R.id.toggle)).setOnClickListener(new View.OnClickListener() {
-            SeekBarWithText seekBar = filterSeekbars.get(f);
-
             @Override
             public void onClick(View v) {
+                SeekBarWithText seekBar = filterSeekbars.get(f);
                 f.lessThan = !f.lessThan;
 
                 View indicatorButton = indicator.findViewById(R.id.button);
