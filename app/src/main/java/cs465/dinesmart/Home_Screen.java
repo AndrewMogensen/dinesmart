@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,6 +20,7 @@ public class Home_Screen extends AppCompatActivity implements View.OnClickListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_home__screen);
 //        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 //        setSupportActionBar(toolbar);
@@ -36,12 +38,12 @@ public class Home_Screen extends AppCompatActivity implements View.OnClickListen
         btn.setOnClickListener(this);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_home__screen, menu);
-        return true;
-    }
+//        getMenuInflater().inflate(R.menu.menu_home__screen, menu);
+//        return true;
+//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
