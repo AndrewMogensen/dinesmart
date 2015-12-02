@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.ImageView;
 
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -79,11 +80,12 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                 .findViewById(R.id.lblListItem);
         txtListChild.setText(itemName);
 
-        String itemPrice = String.valueOf(childItem.getPrice());
+        DecimalFormat df = new DecimalFormat("###.00");
+        String itemPrice = String.valueOf(df.format(childItem.getPrice()));
         TextView txtItemPrice = (TextView) convertView.findViewById(R.id.lblItemPrice);
         txtItemPrice.setText("$" + itemPrice);
 
-        String itemCalories = String.valueOf(childItem.getCalories());
+        String itemCalorgies = String.valueOf(childItem.getCalories());
         TextView txtItemCalories = (TextView) convertView.findViewById(R.id.lblItemCalories);
         txtItemCalories.setText(itemCalories + "cal");
 
