@@ -85,7 +85,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         TextView txtItemPrice = (TextView) convertView.findViewById(R.id.lblItemPrice);
         txtItemPrice.setText("$" + itemPrice);
 
-        String itemCalorgies = String.valueOf(childItem.getCalories());
+        String itemCalories = String.valueOf(childItem.getCalories());
         TextView txtItemCalories = (TextView) convertView.findViewById(R.id.lblItemCalories);
         txtItemCalories.setText(itemCalories + "cal");
 
