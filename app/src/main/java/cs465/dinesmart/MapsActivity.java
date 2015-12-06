@@ -15,6 +15,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.GridLayout;
@@ -381,6 +382,8 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
+
         setContentView(R.layout.activity_maps);
 
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);

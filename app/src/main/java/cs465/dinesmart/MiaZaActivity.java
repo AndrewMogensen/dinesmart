@@ -7,6 +7,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -16,10 +17,13 @@ public class MiaZaActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        this.supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_mia_za);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        setTitle("Mia Za's");
+
+       // Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+       // setSupportActionBar(toolbar);
+       // setTitle("Mia Za's");
 
         String [] pastaFood = {"Fettuccine Alfredo","Veggie Multi-Grain Rotini","Baked Mac and Cheese","Spaghetti With Meatballs"};
         String [] paniniFood = {"Pesto Vegetarian", "Classic Italian", "Barbeque Chicken","Honey Ham"};

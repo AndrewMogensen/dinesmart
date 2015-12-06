@@ -8,6 +8,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -17,11 +18,12 @@ public class PaneraBreadActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_panera_bread);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+       // Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //setSupportActionBar(toolbar);
 
-        setTitle("Panera Bread");
+        //setTitle("Panera Bread");
 
         String [] soupFood = {"Baked Potato Soup","Broccoli Cheddar Soup","Low-Fat Vegetarian Black Bean Soup","Vegetarian Creamy Tomato Soup"};
         String [] bagelFood = {"Cranberry Walnut Bagel", "Pumpkin Pie Bagel", "Everything Bagel","French Toast Bagel"};

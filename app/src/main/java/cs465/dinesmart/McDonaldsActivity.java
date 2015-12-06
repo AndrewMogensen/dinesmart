@@ -11,16 +11,19 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.view.Window;
 
 public class McDonaldsActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_mc_donalds);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        setTitle("McDonald's");
+
+       // Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+       // setSupportActionBar(toolbar);
+       // setTitle("McDonald's");
 
         String [] breakfastFood = {"Egg McMuffin","Hotcakes","Sausage Biscuit","Fruit 'N Yogurt Parfait"};
         String [] burgerFood = {"Big Mac", "Quarter Pounder", "Hamburger","BBQ Ranch Burger"};

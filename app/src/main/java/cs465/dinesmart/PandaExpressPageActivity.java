@@ -8,6 +8,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -17,11 +18,12 @@ public class PandaExpressPageActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_panda_express_page);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //setSupportActionBar(toolbar);
 
-        setTitle("Panda Express");
+        //setTitle("Panda Express");
 
         String [] appetizerFood = {"Chicken Egg Roll","Veggie Spring Roll","Cream Cheese Rangoon","Hot and Sour Soup"};
         String [] shrimpFood = {"Honey Walnut Shrimp", "Peppercorn Shrimp"};
