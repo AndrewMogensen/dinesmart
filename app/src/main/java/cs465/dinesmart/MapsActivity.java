@@ -1,6 +1,8 @@
 package cs465.dinesmart;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -585,8 +587,25 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
         ImageButton home_btn = (ImageButton) findViewById(R.id.home_button);
         home_btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                Intent i = new Intent(MapsActivity.this, Home_Screen.class);
-                startActivity(i);
+                AlertDialog alertDialog = new AlertDialog.Builder(MapsActivity.this).create();
+//                    alertDialog.setTitle("Alert");
+                alertDialog.setMessage("Are you sure you want to go back to the Home Screen?");
+                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                Intent i = new Intent(MapsActivity.this, Home_Screen.class);
+                                startActivity(i);
+//                                dialog.dismiss();
+                            }
+                        });
+                alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                alertDialog.show();
             }
         });
 
