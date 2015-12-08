@@ -589,7 +589,7 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
             public void onClick(View view) {
                 AlertDialog alertDialog = new AlertDialog.Builder(MapsActivity.this).create();
 //                    alertDialog.setTitle("Alert");
-                alertDialog.setMessage("Are you sure you want to go back to the Home Screen?");
+                alertDialog.setMessage("Going to the home screen will reset you current filters. Continue?");
                 alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
