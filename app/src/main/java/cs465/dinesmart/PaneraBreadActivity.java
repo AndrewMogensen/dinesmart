@@ -25,10 +25,22 @@ public class PaneraBreadActivity extends ActionBarActivity {
 
         //setTitle("Panera Bread");
 
-        String [] soupFood = {"Baked Potato Soup","Broccoli Cheddar Soup","Low-Fat Vegetarian Black Bean Soup","Vegetarian Creamy Tomato Soup"};
-        String [] bagelFood = {"Cranberry Walnut Bagel", "Pumpkin Pie Bagel", "Everything Bagel","French Toast Bagel"};
-        String [] sandwichFood = {"Roasted Turkey and Avocado BLT","Sierra Turkey Sandwich","Asiago Steak Sandwich","Classic Grilled Cheese"};
-        String [] saladFood = {"Thai Chicken Salad","Chicken Cobb With Avocado","Power Kale Caesar Salad With Chicken","Greek Salad"};
+        String [] soupFood = {"Baked Potato Soup                       $4.99 340cal",
+                            "Broccoli Cheddar Soup                 $4.99 330cal",
+                            "Vegetarian Black Bean Soup       $4.99 230cal",
+                            "Creamy Tomato Soup                   $4.99 450cal"};
+        String [] bagelFood = {"Cranberry Walnut Bagel                $1.05 340cal",
+                                "Pumpkin Pie Bagel                        $1.34 380cal",
+                                "Everything Bagel                            $1.05 300cal",
+                                "French Toast Bagel                       $1.34 350cal"};
+        String [] sandwichFood = {"Roasted Turkey & Avocado BLT  $7.49 540cal",
+                                "Sierra Turkey Sandwich                $6.99 730cal",
+                                "Asiago Steak Sandwich                $7.99 810cal",
+                                "Classic Grilled Cheese                  $6.99 580cal"};
+        String [] saladFood = {"Thai Chicken Salad                        $8.59 490cal",
+                                "Chicken Cobb With Avocado        $8.59 660cal",
+                                "Kale Caesar Chicken Caesar        $7.99 600cal",
+                                "Greek Salad                                    $7.49 370cal"};
 
 
         ImageButton home_btn = (ImageButton) findViewById(R.id.home_button_panera);

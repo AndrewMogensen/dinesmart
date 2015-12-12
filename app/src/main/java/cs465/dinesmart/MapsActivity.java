@@ -433,7 +433,7 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
         panda.add(new RestMenuItem("Fried Rice", 2.70, 520, 9));
 
         List<RestMenuItem> panera = new ArrayList<RestMenuItem>();
-        panera.add(new RestMenuItem("Chicken Ceasar Salad", 7.49, 460, 14));
+        panera.add(new RestMenuItem("Chicken Caesar Salad", 7.49, 460, 14));
         panera.add(new RestMenuItem("Broccoli Cheddar Soup", 4.99, 330, 34));
         panera.add(new RestMenuItem("Sierra Turkey Sandwich", 6.99, 730, 40));
 
@@ -444,7 +444,7 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
 
         List<RestMenuItem> mcD = new ArrayList<RestMenuItem>();
         mcD.add(new RestMenuItem("Big Mac", 3.99, 540, 25));
-        mcD.add(new RestMenuItem("10-piece McNuggent", 4.49, 470, 22));
+        mcD.add(new RestMenuItem("10-piece McNugget", 4.49, 470, 22));
         mcD.add(new RestMenuItem("Large Fries", 1.89, 510, 2));
 
         List<RestMenuItem> zas = new ArrayList<RestMenuItem>();

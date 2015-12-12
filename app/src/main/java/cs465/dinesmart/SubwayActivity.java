@@ -25,10 +25,20 @@ public class SubwayActivity extends ActionBarActivity {
         //setSupportActionBar(toolbar);
         //setTitle("Subway");
 
-        String [] breakfastFood = {"Bacon, Egg and Cheese","Egg and Cheese","Black Forest Ham, Egg and Cheese","Steak, Egg White and Cheese"};
-        String [] beefFood = {"Meatball Marinara", "Roast Beef", "Steak and Cheese"};
-        String [] chickenFood = {"Oven Roasted Chicken","Chicken and Bacon Ranch Melt","Sweet Onion Chicken Teriyaki"};
-        String [] saladFood = {"Double Chicken Chopped Salad","Spicy Italian Salad","Black Forest Ham Salad","Veggie Delite Salad"};
+        String [] breakfastFood = {"Bacon, Egg and Cheese               $3.50 440cal",
+                                    "Egg and Cheese                           $3.50 360cal",
+                                    "Black Forest Ham, Egg, Cheese $3.50 390cal",
+                                    "Steak, Egg White and Cheese     $3.50 390cal"};
+        String [] beefFood = {"Meatball Marinara                        $3.75 480cal",
+                            "Roast Beef                                     $4.75 320cal",
+                            "Steak and Cheese                        $4.75 380cal"};
+        String [] chickenFood = {"Oven Roasted Chicken                 $4.25 320cal",
+                                "Chicken and Bacon Ranch Melt  $4.75 610cal",
+                                "Sweet Onion Chicken Teriyaki    $4.75 370cal"};
+        String [] saladFood = {"Double Chicken Chopped Salad $7.50 220cal",
+                                "Spicy Italian Salad                        $6.00 390cal",
+                                "Black Forest Ham Salad              $6.00 110cal",
+                                "Veggie Delite Salad                       $5.00 60cal"};
 
         ImageButton home_btn = (ImageButton) findViewById(R.id.home_button_subway);
         home_btn.setOnClickListener(new View.OnClickListener() {

@@ -25,10 +25,19 @@ public class PandaExpressPageActivity extends ActionBarActivity {
 
         //setTitle("Panda Express");
 
-        String [] appetizerFood = {"Chicken Egg Roll","Veggie Spring Roll","Cream Cheese Rangoon","Hot and Sour Soup"};
-        String [] shrimpFood = {"Honey Walnut Shrimp", "Peppercorn Shrimp"};
-        String [] beefFood = {"Beijing Beef","Kobari Beef","Broccoli Beef"};
-        String [] chickenFood = {"Orange Chicken","Kung Pao Chicken","Mandarin Chicken","Sweetfire Chicken Breast"};
+        String [] appetizerFood = {"Chicken Egg Roll                         $1.49 200cal",
+                                    "Veggie Spring Roll                      $1.49 190cal",
+                                    "Cream Cheese Rangoon            $1.49 190cal",
+                                    "Hot and Sour Soup                      $1.49 120cal"};
+        String [] shrimpFood = {"Honey Walnut Shrimp                $5.80 360cal",
+                                "Peppercorn Shrimp                     $5.80 360cal"};
+        String [] beefFood = {"Beijing Beef                                  $5.80 470cal",
+                                "Kobari Beef                                  $6.80 310cal",
+                                "Broccoli Beef                               $5.80 150cal"};
+        String [] chickenFood = {"Orange Chicken                           $5.80 380cal",
+                                "Kung Pao Chicken                       $5.80 290cal",
+                                "Mandarin Chicken                       $5.80 300cal",
+                                "Sweetfire Chicken Breast           $5.80 380cal"};
 
         ImageButton home_btn = (ImageButton) findViewById(R.id.home_button_panda);
         home_btn.setOnClickListener(new View.OnClickListener() {

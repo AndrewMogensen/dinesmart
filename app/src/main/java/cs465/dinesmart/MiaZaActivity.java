@@ -25,10 +25,22 @@ public class MiaZaActivity extends AppCompatActivity {
        // setSupportActionBar(toolbar);
        // setTitle("Mia Za's");
 
-        String [] pastaFood = {"Fettuccine Alfredo","Veggie Multi-Grain Rotini","Baked Mac and Cheese","Spaghetti With Meatballs"};
-        String [] paniniFood = {"Pesto Vegetarian", "Classic Italian", "Barbeque Chicken","Honey Ham"};
-        String [] pizzaFood = {"Hawaiian","Tuscan White","Chicken Fajita","Buffalo Chicken"};
-        String [] saladFood = {"Traditional Greek","Garden Salad","Caesar Salad","Strawberry Romaine"};
+        String [] pastaFood = {"Fettuccine Alfredo                        $6.00 797cal",
+                                "Veggie Multi-Grain Rotini            $6.00 711cal",
+                                "Baked Mac and Cheese              $5.00 944cal",
+                                "Spaghetti With Meatballs           $6.00 764cal"};
+        String [] paniniFood = {"Pesto Vegetarian                         $7.00 744cal",
+                                "Classic Italian                               $7.00 768cal",
+                                "Barbeque Chicken                        $7.00 678cal",
+                                "Honey Ham                                   $7.00 810cal"};
+        String [] pizzaFood = {"Hawaiian                                        $7.00 654cal",
+                                "Tuscan White                                $7.00 882cal",
+                                "Chicken Fajita                               $7.00 1019cal",
+                                "Buffalo Chicken                            $7.00 984cal"};
+        String [] saladFood = {"Traditional Greek                          $6.00 189cal",
+                                "Garden Salad                                $6.00 486cal",
+                                "Caesar Salad                                 $7.00 622cal",
+                                "Strawberry Romaine                    $7.00 250cal"};
 
         ImageButton home_btn = (ImageButton) findViewById(R.id.home_button_miaZa);
         home_btn.setOnClickListener(new View.OnClickListener() {
